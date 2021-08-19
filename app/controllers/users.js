@@ -5,7 +5,9 @@ const { secret } = require('../config');
 class UserController {
     async list(ctx) {
         const { page = 1, size = 10 } = ctx.query;
-        ctx.body = await User.find({})
+        ctx.body = await User.find({ name: new RegExp(ctx.query.name) })
+            .limit(size)
+            .skip((page - 1) * size);
     }
     async getById(ctx) {
         const { fields } = ctx.query;
